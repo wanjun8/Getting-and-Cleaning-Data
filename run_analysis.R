@@ -13,15 +13,24 @@ Measurement<-features$V2[features$id]
 Train_labels<-read.table("./UCI HAR Dataset/train/y_train.txt",header=FALSE)
 Test_labels<-read.table("./UCI HAR Dataset/test/y_test.txt",header=FALSE)
 act_labels<-read.table("./UCI HAR Dataset/activity_labels.txt",header=FALSE)
+act_labels<-as.character(act_labels$V2)
 Labels<-rbind(Train_labels,Test_labels)
-n=length(Labels)
+n=dim(Labels)[1]
 for(i in 1:n){
   for(j in 1:6){
-    if(Labels[i]==j){Labels[i]=act_labels[j,2]}
+    if(Labels[i,1]==j){Labels[i,1]=act_labels[j]}
   }
 }
 
 ## data set with descriptive variable names
 Data$names=Labels[,1]
 
-write.table(Data,"Data.txt")
+## independent tidy data
+m=ncol(Data)
+Tidy=matrix(data=NA,6,(m-1))
+for(i in 1:(m-1)){
+  Tidy[,i]=tapply(Data[,i],Data$names,mean)
+}
+
+write.table(Data,"Tidy.txt")
+
