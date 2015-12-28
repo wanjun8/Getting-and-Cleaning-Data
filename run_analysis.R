@@ -32,5 +32,5 @@ for(i in 1:(m-1)){
   Tidy[,i]=tapply(Data[,i],Data$names,mean)
 }
 
-write.table(Data,"Tidy.txt")
+write.table(Data,"Tidy.txt",row.names = FALSE)
 
